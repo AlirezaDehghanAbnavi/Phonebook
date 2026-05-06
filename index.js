@@ -5,6 +5,7 @@ const cors = require('cors')
 
 const app = express()
 const Person = require('./models/person')
+const errorHandler = require('./utils/middleware')
 
 app.use(cors());
 
@@ -46,8 +47,7 @@ app.get('/api/persons/:id', (request, response) => {
       }
     })
     .catch(error => {
-      console.log(error)
-      response.status(400).send({ error: 'malformatted id' })
+      next(error)
     })
 })
 
@@ -65,6 +65,8 @@ app.delete('/api/persons/:id', async (request, response) => {
   await Person.findByIdAndDelete(request.params.id);
   response.status(204).end();
 });
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
