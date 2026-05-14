@@ -7,15 +7,15 @@ const app = express()
 const Person = require('./models/person')
 const errorHandler = require('./utils/middleware')
 
-app.use(cors());
+app.use(cors())
 
 app.use(express.json())
 app.use(express.static('dist'))
 
 morgan.token('body', (req) => {
-  return JSON.stringify(req.body);
-});
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+  return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
 app.get('/api/persons', (request, response) => {
@@ -29,11 +29,11 @@ app.get('/info', (request, response) => {
     response.send(`
       <p>Phonebook has info for ${count} people</p>
       <p>${new Date()}</p>
-    `);
+    `)
   })
     .catch(err => {
-      console.log(err);
-      response.status(500).send('Error Fetching Data');
+      console.log(err)
+      response.status(500).send('Error Fetching Data')
     })
 })
 
@@ -59,14 +59,14 @@ app.post('/api/persons', async (request, response, next) => {
   }
 
   try {
-    const person = new Person({ name, number });
-    const savedPerson = await person.save();
+    const person = new Person({ name, number })
+    const savedPerson = await person.save()
 
-    response.status(201).json(savedPerson);
+    response.status(201).json(savedPerson)
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
 app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
@@ -87,9 +87,9 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', async (request, response) => {
-  await Person.findByIdAndDelete(request.params.id);
-  response.status(204).end();
-});
+  await Person.findByIdAndDelete(request.params.id)
+  response.status(204).end()
+})
 
 app.use(errorHandler)
 

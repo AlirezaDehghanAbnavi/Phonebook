@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 /*
 The following is not needed since we are using a .env file for injection.
@@ -10,49 +10,49 @@ The following is not needed since we are using a .env file for injection.
 
 // const password = process.argv[2];
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI
 
-mongoose.set('strictQuery', false);
+mongoose.set('strictQuery', false)
 mongoose.connect(url, { family: 4 })
-    .then(result => {
-        console.log('connected to MongoDB')
-    })
-    .catch(error => {
-        console.log('error connecting to MongoDB:', error.message)
-    });
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
 
 const personSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true,
-        minLength: [3, 'Name must be at least 3 characters long']
-    },
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    minLength: [3, 'Name must be at least 3 characters long']
+  },
 
-    number: {
-        type: String,
-        required: true,
-        minLength: 8,
-        validate: {
-            validator: function (v) {
-                return /^\d{2,3}-\d+$/.test(v);
-            },
-            message: props =>
-                `${props.value} is not a valid phone number (format XX-XXXX or XXX-XXXX)`
-        }
+  number: {
+    type: String,
+    required: true,
+    minLength: 8,
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}-\d+$/.test(v)
+      },
+      message: props =>
+        `${props.value} is not a valid phone number (format XX-XXXX or XXX-XXXX)`
     }
-});
-
-personSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        return {
-            id: returnedObject._id.toString(),
-            name: returnedObject.name,
-            number: returnedObject.number
-        }
-    }
+  }
 })
 
-const Person = mongoose.model('Person', personSchema);
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    return {
+      id: returnedObject._id.toString(),
+      name: returnedObject.name,
+      number: returnedObject.number
+    }
+  }
+})
 
-module.exports = Person;
+const Person = mongoose.model('Person', personSchema)
+
+module.exports = Person
