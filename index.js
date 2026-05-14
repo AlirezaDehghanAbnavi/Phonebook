@@ -51,14 +51,20 @@ app.get('/api/persons/:id', (request, response, next) => {
     })
 })
 
-app.post('/api/persons', async (request, response) => {
+app.post('/api/persons', async (request, response, next) => {
+  const { name, number } = request.body
+
+  if (!number) {
+    return response.status(400).json({ error: 'number is missing'})
+  }
+  
   const person = new Person({
-    name: request.body.name,
-    number: request.body.number
+    name: name,
+    number: number
   });
 
   const savedPerson = await person.save();
-  response.status(201).json(savedPerson);
+  response.status(201).json(savedPerson).catch(error => next(error));
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
