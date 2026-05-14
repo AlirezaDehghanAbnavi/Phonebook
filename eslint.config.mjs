@@ -7,6 +7,7 @@ export default [
       sourceType: 'commonjs',
       globals: { ...globals.node },
       ecmaVersion: 'latest',
-    },
+    },    
+    ignores: ['dist/**'],
   },
 ]
