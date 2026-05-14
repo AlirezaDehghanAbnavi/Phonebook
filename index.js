@@ -55,16 +55,17 @@ app.post('/api/persons', async (request, response, next) => {
   const { name, number } = request.body
 
   if (!number) {
-    return response.status(400).json({ error: 'number is missing'})
+    return response.status(400).json({ error: 'number is missing' })
   }
-  
-  const person = new Person({
-    name: name,
-    number: number
-  });
 
-  const savedPerson = await person.save();
-  response.status(201).json(savedPerson).catch(error => next(error));
+  try {
+    const person = new Person({ name, number });
+    const savedPerson = await person.save();
+
+    response.status(201).json(savedPerson);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.put('/api/persons/:id', (request, response, next) => {

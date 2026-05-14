@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 /*
-The following is not needed since we are using a .env file for injection
+The following is not needed since we are using a .env file for injection.
 */
 // if (process.argv.length < 3) {
 //     console.log("Enter Password as CLI Argument");
@@ -24,11 +24,23 @@ mongoose.connect(url, { family: 4 })
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
-        minLength: 5,
+        required: true,
         unique: true,
-        required: true
+        minLength: [5, 'Name must be at least 5 characters long']
     },
-    number: String,
+
+    number: {
+        type: String,
+        required: true,
+        minLength: 8,
+        validate: {
+            validator: function (v) {
+                return /^\d{2,3}-\d+$/.test(v);
+            },
+            message: props =>
+                `${props.value} is not a valid phone number (format XX-XXXX or XXX-XXXX)`
+        }
+    }
 });
 
 personSchema.set('toJSON', {
