@@ -1,26 +1,5 @@
 const mongoose = require('mongoose')
 
-/*
-The following is not needed since we are using a .env file for injection.
-*/
-// if (process.argv.length < 3) {
-//     console.log("Enter Password as CLI Argument");
-//     process.exit(1);
-// }
-
-// const password = process.argv[2];
-
-const url = process.env.MONGODB_URI
-
-mongoose.set('strictQuery', false)
-mongoose.connect(url, { family: 4 })
-  .then(() => {
-    console.log('connected to MongoDB')
-  })
-  .catch(error => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
-
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -53,6 +32,4 @@ personSchema.set('toJSON', {
   }
 })
 
-const Person = mongoose.model('Person', personSchema)
-
-module.exports = Person
+module.exports = mongoose.model('Person', personSchema)
